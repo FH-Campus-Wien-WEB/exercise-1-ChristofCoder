@@ -18,8 +18,82 @@
             xhr.onload = function () {
                 const bodyElement = document.querySelector("body")
                 if (xhr.status == 200) {
-		            /* Part 2: Build the HTML elements here and append them to the body */ 
-                    bodyElement.append(reverseString(xhr.responseText))
+                    /* Part 2: Build the HTML elements here and append them to the body */
+                    //bodyElement.append(reverseString(xhr.responseText))
+                    //Parse the JSON response from String to JavaScript Array and build the HTML elements here and append them to the body
+                    const movies = JSON.parse(xhr.responseText);
+
+                    bodyElement.innerHTML = "<h1>My Movie Collection</h1>";
+
+                    movies.forEach(movie => {
+                        // 3. Create a semantic container for the movie
+                        const movieArticle = document.createElement("article");
+                        movieArticle.style.borderBottom = "1px solid #ccc";
+                        movieArticle.style.padding = "20px";
+
+                        // Add Poster Image
+                        const img = document.createElement("img");
+                        img.src = movie.Poster;
+                        img.alt = `Poster for ${movie.Title}`;
+                        img.style.width = "150px";
+                        movieArticle.appendChild(img);
+
+                        // Add Title
+                        const title = document.createElement("h2");
+                        title.textContent = movie.Title;
+                        movieArticle.appendChild(title);
+
+                        // Add Plot
+                        const plot = document.createElement("p");
+                        plot.innerHTML = `<strong>Plot:</strong> ${movie.Plot}`;
+                        movieArticle.appendChild(plot);
+
+                        // Add Metadata (Year, Runtime, Rating)
+                        const meta = document.createElement("p");
+                        // 1. Calculate hours and remaining minutes
+                        const hours = Math.floor(movie.Runtime / 60);
+                        const mins = movie.Runtime % 60;
+
+                        // 2. Create a formatted string (e.g., "1h 56m")
+                        const duration = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+
+                        // 3. Update the textContent
+                        
+                        meta.textContent = `Released: ${movie.Released} | Runtime: ${duration} | IMDb: ${movie.imdbRating}`;
+                        movieArticle.appendChild(meta);
+                        
+
+                        // Add Genres (as a List)
+                        const genreLabel = document.createElement("h3");
+                        genreLabel.textContent = "Genres";
+                        movieArticle.appendChild(genreLabel);
+
+                        const genreList = document.createElement("ul");
+                        movie.Genres.forEach(genre => {
+                            const li = document.createElement("li");
+                            li.textContent = genre;
+                            genreList.appendChild(li);
+                        });
+                        movieArticle.appendChild(genreList);
+
+                        //add director
+                        const director = document.createElement("p");
+                        director.innerHTML = `<strong>Director:</strong> ${movie.Director}`;
+                        movieArticle.appendChild(director);
+
+                        //add actors
+                        const actors = document.createElement("p");
+                        actors.innerHTML = `<strong>Actors:</strong> ${movie.Actors.join(", ")}`;
+                        movieArticle.appendChild(actors);
+
+                        //add writers
+                        const writers = document.createElement("p");
+                        writers.innerHTML = `<strong>Writers:</strong> ${movie.Writers.join(", ")}`;
+                        movieArticle.appendChild(writers);
+
+                        // 4. Append the finished article to the body
+                        bodyElement.appendChild(movieArticle);
+                    });
                 } else {
                     bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
                 }
