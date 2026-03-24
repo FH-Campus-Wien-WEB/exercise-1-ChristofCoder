@@ -7,6 +7,63 @@
     <title>Movies!</title>
     <style>
         /* Part 3: Your styling goes here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        span {
+            font-size: 0.9em;
+            color: #666;
+            /* top, right, bottom, left */
+            margin: 0 10px 0 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+            margin: 0 0 40px;
+        }
+        article {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 0 0 20px;
+            display: flex;
+            padding: 20px;
+            display: inline-block;
+        }
+        article img {
+            margin-right: 20px;
+            border-radius: 4px;
+            max-width: fit-content;
+        }
+        article h2 {
+            margin-top: 0;
+        }
+        article p {
+            margin: 10px 0;
+        }
+        article ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }   
+        .genre {
+            display: inline-block;
+            background-color: #eee;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border: #333 1px solid;
+            display: inline-block;
+        }
+        .plot {
+            font-style: italic;
+            color: #333;
+            
+        }
     </style>
     <script>
         function reverseString(s) {
@@ -19,7 +76,6 @@
                 const bodyElement = document.querySelector("body")
                 if (xhr.status == 200) {
                     /* Part 2: Build the HTML elements here and append them to the body */
-                    //bodyElement.append(reverseString(xhr.responseText))
                     //Parse the JSON response from String to JavaScript Array and build the HTML elements here and append them to the body
                     const movies = JSON.parse(xhr.responseText);
 
@@ -45,7 +101,7 @@
 
                         // Add Plot
                         const plot = document.createElement("p");
-                        plot.innerHTML = `<strong>Plot:</strong> ${movie.Plot}`;
+                        plot.innerHTML = `<strong>Plot:</strong> <span class="plot">${movie.Plot}</span>`;
                         movieArticle.appendChild(plot);
 
                         // Add Metadata (Year, Runtime, Rating)
@@ -63,18 +119,16 @@
                         movieArticle.appendChild(meta);
 
 
-                        // Add Genres (as a List)
-                        const genreLabel = document.createElement("h3");
-                        genreLabel.textContent = "Genres";
-                        movieArticle.appendChild(genreLabel);
-
-                        const genreList = document.createElement("ul");
-                        movie.Genres.forEach(genre => {
-                            const li = document.createElement("li");
-                            li.textContent = genre;
-                            genreList.appendChild(li);
-                        });
-                        movieArticle.appendChild(genreList);
+                        // Add Genres with special styling
+                        const genres = document.createElement("p");
+                        for (const genre of movie.Genres) {
+                            const genreSpan = document.createElement("span");
+                            genreSpan.textContent = genre;
+                            genreSpan.className = "genre";
+                            
+                            genres.appendChild(genreSpan);
+                        }
+                        movieArticle.appendChild(genres);
 
                         // Access the plural "Directors" and join them back into a string if there are multiple
                         const director = document.createElement("p");
