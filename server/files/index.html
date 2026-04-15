@@ -25,6 +25,7 @@
             margin: 0 0 40px;
         }
         article {
+            border-bottom: 1px solid #ccc;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -43,6 +44,9 @@
         }
         article p {
             margin: 10px 0;
+        }
+        article p:hover {
+            font-size: larger;
         }
         article ul {
             list-style-type: disc;
@@ -66,10 +70,11 @@
         }
     </style>
     <script>
+        /*
         function reverseString(s) {
             return s.split("").reverse().join("");
         }
-
+        */
         window.onload = function () {
             const xhr = new XMLHttpRequest()
             xhr.onload = function () {
@@ -84,14 +89,12 @@
                     movies.forEach(movie => {
                         // 3. Create a semantic container for the movie
                         const movieArticle = document.createElement("article");
-                        movieArticle.style.borderBottom = "1px solid #ccc";
-                        movieArticle.style.padding = "20px";
 
                         // Add Poster Image
                         const img = document.createElement("img");
                         img.src = movie.Poster;
                         img.alt = `Poster for ${movie.Title}`;
-                        img.style.width = "150px";
+                        //img.style.width = "150px";
                         movieArticle.appendChild(img);
 
                         // Add Title
@@ -115,7 +118,7 @@
 
                         // 3. Update the textContent
 
-                        meta.textContent = `Released: ${movie.Released} | Runtime: ${duration} | IMDb: ${movie.imdbRating}`;
+                        meta.innerHTML = `<strong>Released:</strong> ${movie.Released} <strong>Runtime:</strong> ${duration} <strong>IMDb:</strong> ${movie.imdbRating}`;
                         movieArticle.appendChild(meta);
 
 
@@ -130,7 +133,7 @@
                         }
                         movieArticle.appendChild(genres);
 
-                        // Access the plural "Directors" and join them back into a string if there are multiple
+                        // Add the "Directors" and join them back into a string if there are multiple
                         const director = document.createElement("p");
                         director.innerHTML = `<strong>Director:</strong> ${movie.Directors.join(", ")}`;
                         movieArticle.appendChild(director);
